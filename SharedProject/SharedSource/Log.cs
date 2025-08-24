@@ -10,7 +10,7 @@ namespace ReactorFix;
 /// </summary>
 public static class Log
 {
-    private static readonly string LogPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "/LocalMods/ReactorFix/ReactorFix_log.txt");
+    private static readonly string LogPath = Path.Combine( AppDomain.CurrentDomain.BaseDirectory + "/LocalMods/ReactorFix/ReactorFix_log.txt" );
 
     private static void ConsoleLog( string message, Color color = new Color() )
     {
@@ -47,11 +47,11 @@ public static class Log
         ConsoleLog( message, Color.Red );
     }
 
-    public static void FileLog(object message)
+    public static void FileLog( object message )
     {
         try
         {
-            File.AppendAllText(LogPath, DateTime.UtcNow.ToString("o") + " " + message + Environment.NewLine);
+            File.AppendAllText( LogPath, DateTime.UtcNow.ToString("o") + " " + message + Environment.NewLine );
         }
         catch
         {
