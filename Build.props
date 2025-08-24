@@ -1,0 +1,6 @@
+<Project>
+    <PropertyGroup>
+        <ModDeployDir>F:\SteamLibrary\steamapps\common\Barotrauma\LocalMods\ReactorFix\</ModDeployDir>
+        <AssemblyName>ReactorFix</AssemblyName>
+    </PropertyGroup>
+</Project>
