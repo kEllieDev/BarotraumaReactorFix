@@ -36,7 +36,7 @@ public static class Log
         }
         catch
         {
-            // swallow � logging must never throw
+            // swallow, logging must never throw
         }
     }
 
