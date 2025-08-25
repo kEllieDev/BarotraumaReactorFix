@@ -1,5 +1,6 @@
 ﻿using Barotrauma;
 using HarmonyLib;
+using System.Reflection;
 
 namespace ReactorFix;
 
@@ -9,8 +10,8 @@ public partial class Plugin : IAssemblyPlugin
 
     public void Initialize()
     {
-        Log.Info("Initialized!");
-        _harmony = Patches.Patches.CreateAndApplyAllPatches();
+        Log.Info("Initialized, Creating new harmony instance and patching all...");
+        _harmony = Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
     }
 
     public void OnLoadCompleted()
