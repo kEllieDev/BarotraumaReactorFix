@@ -38,8 +38,8 @@ public static class ReactorPatch
             totalTimeField is null || targetFissionRateProp is null || targetTurbineOutputProp is null ||
             fissionRateProp is null || turbineOutputProp is null)
         {
-            Log.Error("ReactorFix: Failed to locate one or more Reactor fields/properties!");
-            Log.FileLog("ReactorFix: Failed to locate one or more Reactor fields/properties!");
+            Log.Error("Failed to locate one or more Reactor fields/properties for constructor!");
+            Log.FileLog("Failed to locate one or more Reactor fields/properties for constructor!");
         }
     }
 
@@ -52,7 +52,7 @@ public static class ReactorPatch
                 totalTimeField is null || targetFissionRateProp is null || targetTurbineOutputProp is null ||
                 fissionRateProp is null || turbineOutputProp is null)
             {
-                Log.Error("ReactorFix: Failed to locate one or more Reactor fields/properties!");
+                Log.Error("Failed to locate one or more Reactor fields/properties for PostFix!");
                 return;
             }
 
@@ -64,7 +64,7 @@ public static class ReactorPatch
             double? totalTime = (double?)totalTimeField.GetValue(null);
             if (totalTime is null)
             {
-                Log.Error("ReactorFix: Failed to locate TotalTime field!");
+                Log.Error("Failed to locate TotalTime field for PostFix!");
                 return;
             }
 
@@ -82,7 +82,7 @@ public static class ReactorPatch
         }
         catch (Exception e)
         {
-            Log.Error($"ReactorFix patch failed: {e}");
+            Log.Error($"Postfix failed: {e}");
             // Don't filelog or we'll spam the log file!!
         }
     }
