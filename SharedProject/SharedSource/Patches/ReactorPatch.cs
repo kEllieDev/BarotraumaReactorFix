@@ -8,60 +8,56 @@ namespace ReactorFix.Patches;
 [HarmonyPatch(typeof(Reactor), nameof(Reactor.Update))]
 public static class ReactorPatch
 {
-    // Cache these so we dont do reflection every frame (yucky!!)
-    private static readonly FieldInfo? fissionTargetField;
-    private static readonly FieldInfo? fissionSignalTimeField;
-    private static readonly FieldInfo? turbineTargetField;
-    private static readonly FieldInfo? turbineSignalTimeField;
-    private static readonly FieldInfo? totalTimeField;
+    // Cache these so we don't do reflection every frame (yucky!!)
+    private static readonly FieldInfo? FissionTargetField;
+    private static readonly FieldInfo? FissionSignalTimeField;
+    private static readonly FieldInfo? TurbineTargetField;
+    private static readonly FieldInfo? TurbineSignalTimeField;
+    private static readonly FieldInfo? TotalTimeField;
 
-    private static readonly PropertyInfo? targetFissionRateProp;
-    private static readonly PropertyInfo? targetTurbineOutputProp;
-    private static readonly PropertyInfo? fissionRateProp;
-    private static readonly PropertyInfo? turbineOutputProp;
+    private static readonly PropertyInfo? TargetFissionRateProp;
+    private static readonly PropertyInfo? TargetTurbineOutputProp;
 
     static ReactorPatch()
     {
-        fissionTargetField = AccessTools.Field(typeof(Reactor), "signalControlledTargetFissionRate");
-        fissionSignalTimeField = AccessTools.Field(typeof(Reactor), "lastReceivedFissionRateSignalTime");
-        turbineTargetField = AccessTools.Field(typeof(Reactor), "signalControlledTargetTurbineOutput");
-        turbineSignalTimeField = AccessTools.Field(typeof(Reactor), "lastReceivedTurbineOutputSignalTime");
-        totalTimeField = AccessTools.Field(typeof(Timing), "TotalTime");
+        FissionTargetField = AccessTools.Field(typeof(Reactor), "signalControlledTargetFissionRate");
+        FissionSignalTimeField = AccessTools.Field(typeof(Reactor), "lastReceivedFissionRateSignalTime");
+        TurbineTargetField = AccessTools.Field(typeof(Reactor), "signalControlledTargetTurbineOutput");
+        TurbineSignalTimeField = AccessTools.Field(typeof(Reactor), "lastReceivedTurbineOutputSignalTime");
+        TotalTimeField = AccessTools.Field(typeof(Timing), "TotalTime");
 
-        targetFissionRateProp = AccessTools.Property(typeof(Reactor), "TargetFissionRate");
-        targetTurbineOutputProp = AccessTools.Property(typeof(Reactor), "TargetTurbineOutput");
-        fissionRateProp = AccessTools.Property(typeof(Reactor), "FissionRate");
-        turbineOutputProp = AccessTools.Property(typeof(Reactor), "TurbineOutput");
+        TargetFissionRateProp = AccessTools.Property(typeof(Reactor), "TargetFissionRate");
+        TargetTurbineOutputProp = AccessTools.Property(typeof(Reactor), "TargetTurbineOutput");
 
-        if (fissionTargetField is null || fissionSignalTimeField is null ||
-            turbineTargetField is null || turbineSignalTimeField is null ||
-            totalTimeField is null || targetFissionRateProp is null || targetTurbineOutputProp is null ||
-            fissionRateProp is null || turbineOutputProp is null)
+        if (FissionTargetField is null || FissionSignalTimeField is null || TurbineTargetField is null ||
+            TurbineSignalTimeField is null || TotalTimeField is null || TargetFissionRateProp is null ||
+            TargetTurbineOutputProp is null)
         {
             Log.Error("Failed to locate one or more Reactor fields/properties for constructor!");
             Log.FileLog("Failed to locate one or more Reactor fields/properties for constructor!");
         }
     }
 
+    // Intended due to Harmony
+    // ReSharper disable once InconsistentNaming
     public static void Postfix(Reactor __instance)
     {
         try
         {
-            if (fissionTargetField is null || fissionSignalTimeField is null ||
-                turbineTargetField is null || turbineSignalTimeField is null ||
-                totalTimeField is null || targetFissionRateProp is null || targetTurbineOutputProp is null ||
-                fissionRateProp is null || turbineOutputProp is null)
+            if (FissionTargetField is null || FissionSignalTimeField is null || TurbineTargetField is null ||
+                TurbineSignalTimeField is null || TotalTimeField is null || TargetFissionRateProp is null ||
+                TargetTurbineOutputProp is null)
             {
                 Log.Error("Failed to locate one or more Reactor fields/properties for PostFix!");
                 return;
             }
 
-            var signalControlledTargetFissionRate = (float?)fissionTargetField.GetValue(__instance);
-            var lastReceivedFissionRateSignalTime = (double?)fissionSignalTimeField.GetValue(__instance);
-            var signalControlledTargetTurbineOutput = (float?)turbineTargetField.GetValue(__instance);
-            var lastReceivedTurbineOutputSignalTime = (double?)turbineSignalTimeField.GetValue(__instance);
+            var signalControlledTargetFissionRate = (float?)FissionTargetField.GetValue(__instance);
+            var lastReceivedFissionRateSignalTime = (double?)FissionSignalTimeField.GetValue(__instance);
+            var signalControlledTargetTurbineOutput = (float?)TurbineTargetField.GetValue(__instance);
+            var lastReceivedTurbineOutputSignalTime = (double?)TurbineSignalTimeField.GetValue(__instance);
 
-            double? totalTime = (double?)totalTimeField.GetValue(null);
+            var totalTime = (double?)TotalTimeField.GetValue(null);
             if (totalTime is null)
             {
                 Log.Error("Failed to locate TotalTime field for PostFix!");
@@ -70,20 +66,19 @@ public static class ReactorPatch
 
             if (signalControlledTargetFissionRate.HasValue && lastReceivedFissionRateSignalTime > totalTime.Value - 1.0)
             {
-                targetFissionRateProp.SetValue(__instance, signalControlledTargetFissionRate.Value);
-                //fissionRateProp.SetValue(__instance, signalControlledTargetFissionRate.Value);
+                TargetFissionRateProp.SetValue(__instance, signalControlledTargetFissionRate.Value);
             }
 
-            if (signalControlledTargetTurbineOutput.HasValue && lastReceivedTurbineOutputSignalTime > totalTime.Value - 1.0)
+            if (signalControlledTargetTurbineOutput.HasValue &&
+                lastReceivedTurbineOutputSignalTime > totalTime.Value - 1.0)
             {
-                targetTurbineOutputProp.SetValue(__instance, signalControlledTargetTurbineOutput.Value);
-                //turbineOutputProp.SetValue(__instance, signalControlledTargetTurbineOutput.Value);
+                TargetTurbineOutputProp.SetValue(__instance, signalControlledTargetTurbineOutput.Value);
             }
         }
         catch (Exception e)
         {
             Log.Error($"Postfix failed: {e}");
-            // Don't filelog or we'll spam the log file!!
+            // Don't file log, or we'll spam the log file!!
         }
     }
 }
