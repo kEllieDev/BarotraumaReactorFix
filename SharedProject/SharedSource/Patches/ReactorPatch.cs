@@ -8,7 +8,7 @@ namespace ReactorFix.Patches;
 [HarmonyPatch(typeof(Reactor), nameof(Reactor.Update))]
 public static class ReactorPatch
 {
-    // Cache fieldinfo so we dont do reflection every frame (yucky!!)
+    // Cache these so we dont do reflection every frame (yucky!!)
     private static readonly FieldInfo? fissionTargetField;
     private static readonly FieldInfo? fissionSignalTimeField;
     private static readonly FieldInfo? turbineTargetField;
