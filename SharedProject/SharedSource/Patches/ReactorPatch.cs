@@ -71,13 +71,13 @@ public static class ReactorPatch
             if (signalControlledTargetFissionRate.HasValue && lastReceivedFissionRateSignalTime > totalTime.Value - 1.0)
             {
                 targetFissionRateProp.SetValue(__instance, signalControlledTargetFissionRate.Value);
-                fissionRateProp.SetValue(__instance, signalControlledTargetFissionRate.Value);
+                //fissionRateProp.SetValue(__instance, signalControlledTargetFissionRate.Value);
             }
 
             if (signalControlledTargetTurbineOutput.HasValue && lastReceivedTurbineOutputSignalTime > totalTime.Value - 1.0)
             {
                 targetTurbineOutputProp.SetValue(__instance, signalControlledTargetTurbineOutput.Value);
-                turbineOutputProp.SetValue(__instance, signalControlledTargetTurbineOutput.Value);
+                //turbineOutputProp.SetValue(__instance, signalControlledTargetTurbineOutput.Value);
             }
         }
         catch (Exception e)
