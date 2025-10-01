@@ -11,8 +11,7 @@ namespace ReactorFix;
 /// </summary>
 public static class Log
 {
-    private static readonly string LogPath =
-        Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "/LocalMods/ReactorFix/ReactorFix_log.txt");
+    private static readonly string LogPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "/LocalMods/ReactorFix/ReactorFix_log.txt");
 
     public static void Info(string message, ServerLog.MessageType messageType = ServerLog.MessageType.ServerMessage)
     {
@@ -41,13 +40,11 @@ public static class Log
         }
     }
 
-    private static void ConsoleLog(string message, Color color = new Color(),
-        ServerLog.MessageType messageType = ServerLog.MessageType.ServerMessage)
+    private static void ConsoleLog(string message, Color color = new(), ServerLog.MessageType messageType = ServerLog.MessageType.ServerMessage)
     {
         try
         {
-            var method = AccessTools.Method(typeof(LuaCsLogger), "Log",
-                [typeof(string), typeof(Color?), typeof(ServerLog.MessageType)]);
+            var method = AccessTools.Method(typeof(LuaCsLogger), "Log", [typeof(string), typeof(Color?), typeof(ServerLog.MessageType)]);
             method.Invoke(null, [$"[{Assembly.GetExecutingAssembly().FullName}]: {message}", color, messageType]);
         }
         catch (Exception ex)

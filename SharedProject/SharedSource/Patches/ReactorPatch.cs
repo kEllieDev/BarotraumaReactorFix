@@ -29,9 +29,7 @@ public static class ReactorPatch
         TargetFissionRateProp = AccessTools.Property(typeof(Reactor), "TargetFissionRate");
         TargetTurbineOutputProp = AccessTools.Property(typeof(Reactor), "TargetTurbineOutput");
 
-        if (FissionTargetField is null || FissionSignalTimeField is null || TurbineTargetField is null ||
-            TurbineSignalTimeField is null || TotalTimeField is null || TargetFissionRateProp is null ||
-            TargetTurbineOutputProp is null)
+        if (FissionTargetField is null || FissionSignalTimeField is null || TurbineTargetField is null || TurbineSignalTimeField is null || TotalTimeField is null || TargetFissionRateProp is null || TargetTurbineOutputProp is null)
         {
             Log.Error("Failed to locate one or more Reactor fields/properties for constructor!");
             Log.FileLog("Failed to locate one or more Reactor fields/properties for constructor!");
@@ -44,9 +42,7 @@ public static class ReactorPatch
     {
         try
         {
-            if (FissionTargetField is null || FissionSignalTimeField is null || TurbineTargetField is null ||
-                TurbineSignalTimeField is null || TotalTimeField is null || TargetFissionRateProp is null ||
-                TargetTurbineOutputProp is null)
+            if (FissionTargetField is null || FissionSignalTimeField is null || TurbineTargetField is null || TurbineSignalTimeField is null || TotalTimeField is null || TargetFissionRateProp is null || TargetTurbineOutputProp is null)
             {
                 Log.Error("Failed to locate one or more Reactor fields/properties for PostFix!");
                 return;
@@ -69,8 +65,7 @@ public static class ReactorPatch
                 TargetFissionRateProp.SetValue(__instance, signalControlledTargetFissionRate.Value);
             }
 
-            if (signalControlledTargetTurbineOutput.HasValue &&
-                lastReceivedTurbineOutputSignalTime > totalTime.Value - 1.0)
+            if (signalControlledTargetTurbineOutput.HasValue && lastReceivedTurbineOutputSignalTime > totalTime.Value - 1.0)
             {
                 TargetTurbineOutputProp.SetValue(__instance, signalControlledTargetTurbineOutput.Value);
             }
