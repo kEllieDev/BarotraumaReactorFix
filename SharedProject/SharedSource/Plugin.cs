@@ -6,12 +6,10 @@ namespace ReactorFix;
 
 public partial class Plugin : IAssemblyPlugin
 {
-    private Harmony? _harmony;
-
     public void Initialize()
     {
         Log.Info("Initialized, Creating new harmony instance and patching all...");
-        _harmony = Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
+        Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
     }
 
     public void OnLoadCompleted()
